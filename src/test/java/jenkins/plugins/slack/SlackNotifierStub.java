@@ -2,12 +2,12 @@ package jenkins.plugins.slack;
 
 public class SlackNotifierStub extends SlackNotifier {
 
-    public SlackNotifierStub(String webhookId, String authToken, boolean botUser, String room, String authTokenCredentialId,
+    public SlackNotifierStub(String webhookId, String authToken, boolean botUser, String authTokenCredentialId,
                              String sendAs, boolean startNotification, boolean notifyAborted, boolean notifyFailure,
                              boolean notifyNotBuilt, boolean notifySuccess, boolean notifyUnstable, boolean notifyBackToNormal,
                              boolean notifyRepeatedFailure, boolean includeTestSummary, boolean includeFailedTests, 
                              CommitInfoChoice commitInfoChoice, boolean includeCustomMessage, String customMessage) {
-        super(webhookId, authToken, botUser, room, authTokenCredentialId, sendAs, startNotification, notifyAborted, notifyFailure,
+        super(webhookId, authToken, botUser, authTokenCredentialId, sendAs, startNotification, notifyAborted, notifyFailure,
                 notifyNotBuilt, notifySuccess, notifyUnstable, notifyBackToNormal, notifyRepeatedFailure,
                 includeTestSummary, includeFailedTests, commitInfoChoice, includeCustomMessage, customMessage);
     }
@@ -21,7 +21,7 @@ public class SlackNotifierStub extends SlackNotifier {
         }
 
         @Override
-        SlackService getSlackService(final String webhookId, final String authToken, final String authTokenCredentialId, final boolean botUser, final String room) {
+        SlackService getSlackService(final String webhookId, final String authToken, final String authTokenCredentialId, final boolean botUser) {
             return slackService;
         }
 

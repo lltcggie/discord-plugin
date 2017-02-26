@@ -7,7 +7,6 @@
     <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.2-SNAPSHOT">
       <webhookId></webhookId>
       <token></token>
-      <room></room>
       <startNotification>true</startNotification>
       <notifySuccess>true</notifySuccess>
       <notifyAborted>true</notifyAborted>

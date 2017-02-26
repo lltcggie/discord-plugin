@@ -43,7 +43,6 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         assertEquals("jenkins-slack-plugin", notifier.getWebhookId());
         assertEquals("auth-token-for-test", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
-        assertEquals("#slack-plugin-testing", notifier.getRoom());
 
         assertFalse(notifier.getStartNotification());
         assertTrue(notifier.getNotifySuccess());
@@ -70,7 +69,6 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         assertEquals("jenkins-slack-plugin", notifier.getWebhookId());
         assertEquals("auth-token-for-test", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
-        assertEquals("#slack-plugin-testing", notifier.getRoom());
 
         assertFalse(notifier.getStartNotification());
         assertTrue(notifier.getNotifySuccess());
@@ -97,7 +95,6 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         assertEquals("", notifier.getWebhookId());
         assertEquals("", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
-        assertEquals("", notifier.getRoom());
 
         assertFalse(notifier.getStartNotification());
         assertTrue(notifier.getNotifySuccess());
@@ -152,7 +149,6 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         assertEquals("", notifier.getWebhookId());
         assertEquals("", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
-        assertEquals("", notifier.getRoom());
 
         assertTrue(notifier.getStartNotification());
         assertTrue(notifier.getNotifySuccess());

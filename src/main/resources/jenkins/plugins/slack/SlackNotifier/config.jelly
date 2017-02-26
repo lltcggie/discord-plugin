@@ -70,11 +70,8 @@
             <f:checkbox name="slackBotUser" value="true" checked="${instance.getBotUser()}"/>
         </f:entry>
 
-        <f:entry title="Project Channel" help="/plugin/slack/help-projectConfig-slackRoom.html">
-            <f:textbox name="slackRoom" value="${instance.getRoom()}"/>
-        </f:entry>
         <f:validateButton
                 title="${%Test Connection}" progress="${%Testing...}"
-                method="testConnection" with="slackWebhookId,slackToken,tokenCredentialId,slackRoom"/>
+                method="testConnection" with="slackWebhookId,slackToken,tokenCredentialId"/>
     </f:advanced>
 </j:jelly>

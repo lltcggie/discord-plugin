@@ -7,7 +7,6 @@
     <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.1-SNAPSHOT">
       <webhookId></webhookId>
       <token></token>
-      <room></room>
       <startNotification>false</startNotification>
       <notifySuccess>true</notifySuccess>
       <notifyAborted>false</notifyAborted>
@@ -39,7 +38,6 @@
       <webhookId>jenkins-slack-plugin</webhookId>
       <authToken>auth-token-for-test</authToken>
       <buildServerUrl>http://localhost:8080/</buildServerUrl>
-      <room>#slack-plugin-testing</room>
     </jenkins.plugins.slack.SlackNotifier>
   </publishers>
   <buildWrappers/>

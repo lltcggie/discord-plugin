@@ -95,7 +95,6 @@ public class SlackSendStepTest {
         when(slackDescMock.getToken()).thenReturn("globalToken");
         when(slackDescMock.getTokenCredentialId()).thenReturn("globalTokenCredentialId");
         when(slackDescMock.getBotUser()).thenReturn(false);
-        when(slackDescMock.getRoom()).thenReturn("globalChannel");
 
         when(taskListenerMock.getLogger()).thenReturn(printStreamMock);
         doNothing().when(printStreamMock).println();

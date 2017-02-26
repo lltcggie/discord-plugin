@@ -40,7 +40,6 @@ public class SlackSendStep extends AbstractStepImpl {
     private String token;
     private String tokenCredentialId;
     private boolean botUser;
-    private String channel;
     private String webhookId;
     private boolean failOnError;
 
@@ -84,15 +83,6 @@ public class SlackSendStep extends AbstractStepImpl {
     @DataBoundSetter
     public void setBotUser(boolean botUser) {
         this.botUser = botUser;
-    }
-
-    public String getChannel() {
-        return channel;
-    }
-
-    @DataBoundSetter
-    public void setChannel(String channel) {
-        this.channel = Util.fixEmpty(channel);
     }
 
     public String getWebhookId() {
@@ -191,13 +181,12 @@ public class SlackSendStep extends AbstractStepImpl {
                 token = slackDesc.getToken();
                 botUser = slackDesc.getBotUser();
             }
-            String channel = step.channel != null ? step.channel : slackDesc.getRoom();
             String color = step.color != null ? step.color : "";
 
             //placing in console log to simplify testing of retrieving values from global config or from step field; also used for tests
-            listener.getLogger().println(Messages.SlackSendStepConfig(step.webhookId == null, step.token == null, step.channel == null, step.color == null));
+            listener.getLogger().println(Messages.SlackSendStepConfig(step.webhookId == null, step.token == null, step.color == null));
 
-            SlackService slackService = getSlackService(team, token, tokenCredentialId, botUser, channel);
+            SlackService slackService = getSlackService(team, token, tokenCredentialId, botUser);
             boolean publishSuccess = slackService.publish(step.message, color);
             if (!publishSuccess && step.failOnError) {
                 throw new AbortException(Messages.NotificationFailed());
@@ -208,8 +197,8 @@ public class SlackSendStep extends AbstractStepImpl {
         }
 
         //streamline unit testing
-        SlackService getSlackService(String team, String token, String tokenCredentialId, boolean botUser, String channel) {
-            return new StandardSlackService(team, token, tokenCredentialId, botUser, channel);
+        SlackService getSlackService(String team, String token, String tokenCredentialId, boolean botUser) {
+            return new StandardSlackService(team, token, tokenCredentialId, botUser);
         }
     }
 }

@@ -24,11 +24,8 @@
     <f:entry title="Is Bot User?" help="/plugin/slack/help-globalConfig-botUser.html">
         <f:checkbox field="botUser" name="slackBotUser" value="true" checked="${descriptor.getBotUser()}" />
     </f:entry>
-    <f:entry title="Channel" help="/plugin/slack/help-globalConfig-slackRoom.html">
-        <f:textbox field="room" name="slackRoom" value="${descriptor.getRoom()}" />
-    </f:entry>
     <f:validateButton
         title="${%Test Connection}" progress="${%Testing...}"
-        method="testConnection" with="slackWebhookId,slackToken,tokenCredentialId,slackRoom" />
+        method="testConnection" with="slackWebhookId,slackToken,tokenCredentialId" />
   </f:section>
 </j:jelly>

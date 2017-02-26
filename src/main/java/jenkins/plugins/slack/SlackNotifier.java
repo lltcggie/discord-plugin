@@ -45,7 +45,6 @@ public class SlackNotifier extends Notifier {
     private String authToken;
     private String authTokenCredentialId;
     private boolean botUser;
-    private String room;
     private String sendAs;
     private boolean startNotification;
     private boolean notifySuccess;
@@ -73,15 +72,6 @@ public class SlackNotifier extends Notifier {
     @DataBoundSetter
     public void setWebhookId(final String webhookId) {
         this.webhookId = webhookId;
-    }
-
-    public String getRoom() {
-        return room;
-    }
-
-    @DataBoundSetter
-    public void setRoom(String room) {
-        this.room = room;
     }
 
     public String getAuthToken() {
@@ -237,7 +227,7 @@ public class SlackNotifier extends Notifier {
         super();
     }
 
-    public SlackNotifier(final String webhookId, final String authToken, final boolean botUser, final String room, final String authTokenCredentialId,
+    public SlackNotifier(final String webhookId, final String authToken, final boolean botUser, final String authTokenCredentialId,
                          final String sendAs, final boolean startNotification, final boolean notifyAborted, final boolean notifyFailure,
                          final boolean notifyNotBuilt, final boolean notifySuccess, final boolean notifyUnstable, final boolean notifyBackToNormal,
                          final boolean notifyRepeatedFailure, final boolean includeTestSummary, final boolean includeFailedTests,
@@ -247,7 +237,6 @@ public class SlackNotifier extends Notifier {
         this.authToken = authToken;
         this.authTokenCredentialId = StringUtils.trim(authTokenCredentialId);
         this.botUser = botUser;
-        this.room = room;
         this.sendAs = sendAs;
         this.startNotification = startNotification;
         this.notifyAborted = notifyAborted;
@@ -283,10 +272,6 @@ public class SlackNotifier extends Notifier {
         if (StringUtils.isEmpty(authTokenCredentialId)) {
             authTokenCredentialId = getDescriptor().getTokenCredentialId();
         }
-        String room = this.room;
-        if (StringUtils.isEmpty(room)) {
-            room = getDescriptor().getRoom();
-        }
 
         EnvVars env = null;
         try {
@@ -298,9 +283,8 @@ public class SlackNotifier extends Notifier {
         webhookId = env.expand(webhookId);
         authToken = env.expand(authToken);
         authTokenCredentialId = env.expand(authTokenCredentialId);
-        room = env.expand(room);
 
-        return new StandardSlackService(webhookId, authToken, authTokenCredentialId, botUser, room);
+        return new StandardSlackService(webhookId, authToken, authTokenCredentialId, botUser);
     }
 
     @Override
@@ -329,7 +313,6 @@ public class SlackNotifier extends Notifier {
         private String token;
         private String tokenCredentialId;
         private boolean botUser;
-        private String room;
         private String sendAs;
 
         public static final CommitInfoChoice[] COMMIT_INFO_CHOICES = CommitInfoChoice.values();
@@ -352,10 +335,6 @@ public class SlackNotifier extends Notifier {
 
         public boolean getBotUser() {
             return botUser;
-        }
-
-        public String getRoom() {
-            return room;
         }
 
         public String getSendAs() {
@@ -392,7 +371,6 @@ public class SlackNotifier extends Notifier {
             String token = sr.getParameter("slackToken");
             String tokenCredentialId = json.getString("tokenCredentialId");
             boolean botUser = "true".equals(sr.getParameter("slackBotUser"));
-            String room = sr.getParameter("slackRoom");
             boolean startNotification = "true".equals(sr.getParameter("slackStartNotification"));
             boolean notifySuccess = "true".equals(sr.getParameter("slackNotifySuccess"));
             boolean notifyAborted = "true".equals(sr.getParameter("slackNotifyAborted"));
@@ -406,7 +384,7 @@ public class SlackNotifier extends Notifier {
             CommitInfoChoice commitInfoChoice = CommitInfoChoice.forDisplayName(sr.getParameter("slackCommitInfoChoice"));
             boolean includeCustomMessage = "on".equals(sr.getParameter("includeCustomMessage"));
             String customMessage = sr.getParameter("customMessage");
-            return new SlackNotifier(webhookId, token, botUser, room, tokenCredentialId, sendAs, startNotification, notifyAborted,
+            return new SlackNotifier(webhookId, token, botUser, tokenCredentialId, sendAs, startNotification, notifyAborted,
                     notifyFailure, notifyNotBuilt, notifySuccess, notifyUnstable, notifyBackToNormal, notifyRepeatedFailure,
                     includeTestSummary, includeFailedTests, commitInfoChoice, includeCustomMessage, customMessage);
         }
@@ -417,14 +395,13 @@ public class SlackNotifier extends Notifier {
             token = sr.getParameter("slackToken");
             tokenCredentialId = formData.getJSONObject("slack").getString("tokenCredentialId");
             botUser = "true".equals(sr.getParameter("slackBotUser"));
-            room = sr.getParameter("slackRoom");
             sendAs = sr.getParameter("slackSendAs");
             save();
             return super.configure(sr, formData);
         }
 
-        SlackService getSlackService(final String webhookId, final String authToken, final String authTokenCredentialId, final boolean botUser, final String room) {
-            return new StandardSlackService(webhookId, authToken, authTokenCredentialId, botUser, room);
+        SlackService getSlackService(final String webhookId, final String authToken, final String authTokenCredentialId, final boolean botUser) {
+            return new StandardSlackService(webhookId, authToken, authTokenCredentialId, botUser);
         }
 
         @Override
@@ -435,8 +412,7 @@ public class SlackNotifier extends Notifier {
         public FormValidation doTestConnection(@QueryParameter("slackWebhookId") final String webhookId,
                                                @QueryParameter("slackToken") final String authToken,
                                                @QueryParameter("tokenCredentialId") final String authTokenCredentialId,
-                                               @QueryParameter("slackBotUser") final boolean botUser,
-                                               @QueryParameter("slackRoom") final String room) throws FormException {
+                                               @QueryParameter("slackBotUser") final boolean botUser) throws FormException {
             try {
                 String targetDomain = webhookId;
                 if (StringUtils.isEmpty(targetDomain)) {
@@ -452,11 +428,7 @@ public class SlackNotifier extends Notifier {
                 if (StringUtils.isEmpty(targetTokenCredentialId)) {
                     targetTokenCredentialId = this.tokenCredentialId;
                 }
-                String targetRoom = room;
-                if (StringUtils.isEmpty(targetRoom)) {
-                    targetRoom = this.room;
-                }
-                SlackService testSlackService = getSlackService(targetDomain, targetToken, targetTokenCredentialId, targetBotUser, targetRoom);
+                SlackService testSlackService = getSlackService(targetDomain, targetToken, targetTokenCredentialId, targetBotUser);
                 String message = "Discord/Jenkins plugin: you're all set on " + DisplayURLProvider.get().getRoot();
                 boolean success = testSlackService.publish(message, "good");
                 return success ? FormValidation.ok("Success") : FormValidation.error("Failure");
@@ -472,7 +444,6 @@ public class SlackNotifier extends Notifier {
         private String webhookId;
         private String token;
         private boolean botUser;
-        private String room;
         private boolean startNotification;
         private boolean notifySuccess;
         private boolean notifyAborted;
@@ -490,7 +461,6 @@ public class SlackNotifier extends Notifier {
         public SlackJobProperty(String webhookId,
                                 String token,
                                 boolean botUser,
-                                String room,
                                 boolean startNotification,
                                 boolean notifyAborted,
                                 boolean notifyFailure,
@@ -506,7 +476,6 @@ public class SlackNotifier extends Notifier {
             this.webhookId = webhookId;
             this.token = token;
             this.botUser = botUser;
-            this.room = room;
             this.startNotification = startNotification;
             this.notifyAborted = notifyAborted;
             this.notifyFailure = notifyFailure;
@@ -534,11 +503,6 @@ public class SlackNotifier extends Notifier {
         @Exported
         public boolean getBotUser() {
             return botUser;
-        }
-
-        @Exported
-        public String getRoom() {
-            return room;
         }
 
         @Exported

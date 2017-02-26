@@ -68,9 +68,6 @@ public class AbstractProjectConfigMigrator {
         if (StringUtils.isBlank(slackNotifier.getAuthToken())) {
             slackNotifier.setAuthToken(slackJobProperty.getToken());
         }
-        if (StringUtils.isBlank(slackNotifier.getRoom())) {
-            slackNotifier.setRoom(slackJobProperty.getRoom());
-        }
 
         slackNotifier.setStartNotification(slackJobProperty.getStartNotification());
 

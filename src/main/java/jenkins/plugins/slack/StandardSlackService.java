@@ -39,15 +39,13 @@ public class StandardSlackService implements SlackService {
     private String token;
     private String authTokenCredentialId;
     private boolean botUser;
-    private String[] roomIds;
 
-    public StandardSlackService(String webhookId, String token, String authTokenCredentialId, boolean botUser, String roomId) {
+    public StandardSlackService(String webhookId, String token, String authTokenCredentialId, boolean botUser) {
         super();
         this.webhookId = webhookId;
         this.token = token;
         this.authTokenCredentialId = StringUtils.trim(authTokenCredentialId);
         this.botUser = botUser;
-        this.roomIds = roomId.split("[,; ]+");
     }
 
     public boolean publish(String message) {
@@ -56,7 +54,7 @@ public class StandardSlackService implements SlackService {
 
     public boolean publish(String message, String color) {
         boolean result = true;
-        for (String roomId : roomIds) {
+        if (true) {
             //prepare attachments first
             //JSONObject field = new JSONObject();
             //field.put("short", false);
@@ -128,7 +126,7 @@ public class StandardSlackService implements SlackService {
                 post.addParameter("payload", json.toString());
 
             }
-            logger.fine("Posting: to " + roomId + " on " + webhookId + " using " + url + ": " + message + " " + color);
+            logger.fine("Posting: to " + webhookId + " using " + url + ": " + message + " " + color);
             HttpClient client = getHttpClient();
             post.getParams().setContentCharset("UTF-8");
             post.getParams().setParameter("http.useragent", "discord webhook");
