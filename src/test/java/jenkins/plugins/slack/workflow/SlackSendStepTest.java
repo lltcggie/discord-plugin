@@ -58,7 +58,6 @@ public class SlackSendStepTest {
         slackSendStep.setTokenCredentialId("tokenCredentialId");
         slackSendStep.setBotUser(false);
         slackSendStep.setWebhookId("webhookId");
-        slackSendStep.setChannel("channel");
         slackSendStep.setColor("good");
         stepExecution.step = slackSendStep;
 
@@ -72,11 +71,11 @@ public class SlackSendStepTest {
         when(taskListenerMock.getLogger()).thenReturn(printStreamMock);
         doNothing().when(printStreamMock).println();
 
-        when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean(), anyString())).thenReturn(slackServiceMock);
+        when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(slackServiceMock);
         when(slackServiceMock.publish(anyString(), anyString())).thenReturn(true);
 
         stepExecution.run();
-        verify(stepExecution, times(1)).getSlackService("webhookId", "token", "tokenCredentialId", false, "channel");
+        verify(stepExecution, times(1)).getSlackService("webhookId", "token", "tokenCredentialId", false);
         verify(slackServiceMock, times(1)).publish("message", "good");
         assertFalse(stepExecution.step.isFailOnError());
     }
@@ -99,15 +98,14 @@ public class SlackSendStepTest {
         when(taskListenerMock.getLogger()).thenReturn(printStreamMock);
         doNothing().when(printStreamMock).println();
 
-        when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean(), anyString())).thenReturn(slackServiceMock);
+        when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(slackServiceMock);
 
         stepExecution.run();
-        verify(stepExecution, times(1)).getSlackService("globalWebhookId", "globalToken", "globalTokenCredentialId", false, "globalChannel");
+        verify(stepExecution, times(1)).getSlackService("globalWebhookId", "globalToken", "globalTokenCredentialId", false);
         verify(slackServiceMock, times(1)).publish("message", "");
         assertNull(stepExecution.step.getWebhookId());
         assertNull(stepExecution.step.getToken());
         assertNull(stepExecution.step.getTokenCredentialId());
-        assertNull(stepExecution.step.getChannel());
         assertNull(stepExecution.step.getColor());
     }
 
@@ -126,7 +124,7 @@ public class SlackSendStepTest {
         when(taskListenerMock.getLogger()).thenReturn(printStreamMock);
         doNothing().when(printStreamMock).println();
 
-        when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean(), anyString())).thenReturn(slackServiceMock);
+        when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean())).thenReturn(slackServiceMock);
 
         stepExecution.run();
         verify(slackServiceMock, times(1)).publish("message", "");

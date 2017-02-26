@@ -19,7 +19,6 @@ public class SlackSendStepIntegrationTest {
     public void configRoundTrip() throws Exception {
         SlackSendStep step1 = new SlackSendStep("message");
         step1.setColor("good");
-        step1.setChannel("#channel");
         step1.setToken("token");
         step1.setTokenCredentialId("tokenCredentialId");
         step1.setWebhookId("webhookId");

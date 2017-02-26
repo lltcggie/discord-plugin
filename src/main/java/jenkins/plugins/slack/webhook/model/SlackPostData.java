@@ -9,7 +9,6 @@ public class SlackPostData {
     private String team_id;
     private String team_domain;
     private String channel_id;
-    private String channel_name;
     private String timestamp;
     private String user_id;
     private String user_name;
@@ -57,14 +56,6 @@ public class SlackPostData {
 
     public String getChannel_id() {
         return this.channel_id;
-    }
-
-    public void setChannel_name(String channel_name) {
-        this.channel_name = channel_name;
-    }
-
-    public String getChannel_name() {
-        return this.channel_name;
     }
 
     public void setTimestamp(String timestamp) {
