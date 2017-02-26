@@ -54,8 +54,8 @@
             </select>
         </f:entry>
 
-        <f:entry title="Team Subdomain" help="/plugin/slack/help-projectConfig-slackTeamDomain.html">
-            <f:textbox name="slackTeamDomain" value="${instance.getTeamDomain()}"/>
+        <f:entry title="Webhook ID" help="/plugin/slack/help-projectConfig-slackWebhookId.html">
+            <f:textbox name="slackWebhookId" value="${instance.getWebhookId()}"/>
         </f:entry>
 
         <f:entry title="Integration Token" help="/plugin/slack/help-projectConfig-slackToken.html">
@@ -75,6 +75,6 @@
         </f:entry>
         <f:validateButton
                 title="${%Test Connection}" progress="${%Testing...}"
-                method="testConnection" with="slackTeamDomain,slackToken,tokenCredentialId,slackRoom"/>
+                method="testConnection" with="slackWebhookId,slackToken,tokenCredentialId,slackRoom"/>
     </f:advanced>
 </j:jelly>

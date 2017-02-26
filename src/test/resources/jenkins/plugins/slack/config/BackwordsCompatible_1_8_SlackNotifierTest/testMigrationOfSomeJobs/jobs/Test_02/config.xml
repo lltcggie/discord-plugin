@@ -5,7 +5,7 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.plugins.slack.SlackNotifier_-SlackJobProperty plugin="slack@1.8.2-SNAPSHOT">
-      <teamDomain></teamDomain>
+      <webhookId></webhookId>
       <token></token>
       <room></room>
       <startNotification>true</startNotification>
@@ -47,7 +47,7 @@
   </builders>
   <publishers>
     <jenkins.plugins.slack.SlackNotifier plugin="slack@1.8.2-SNAPSHOT">
-      <teamDomain></teamDomain>
+      <webhookId></webhookId>
       <authToken></authToken>
     </jenkins.plugins.slack.SlackNotifier>
   </publishers>

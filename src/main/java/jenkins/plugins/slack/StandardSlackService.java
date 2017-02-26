@@ -58,22 +58,33 @@ public class StandardSlackService implements SlackService {
         boolean result = true;
         for (String roomId : roomIds) {
             //prepare attachments first
-            JSONObject field = new JSONObject();
-            field.put("short", false);
-            field.put("value", message);
+            //JSONObject field = new JSONObject();
+            //field.put("short", false);
+            //field.put("value", message);
 
-            JSONArray fields = new JSONArray();
-            fields.put(field);
+            //JSONArray fields = new JSONArray();
+            //fields.put(field);
+
+            if (color == "good") {
+                color = "#36a64f";
+            } else if (color == "warning") {
+                color = "#daa038";
+            } else if (color == "danger") {
+                color = "#d00000";
+            } else {
+                color = "#e8e8e8";
+            }
 
             JSONObject attachment = new JSONObject();
             attachment.put("fallback", message);
             attachment.put("color", color);
-            attachment.put("fields", fields);
-            JSONArray mrkdwn = new JSONArray();
-            mrkdwn.put("pretext");
-            mrkdwn.put("text");
-            mrkdwn.put("fields");
-            attachment.put("mrkdwn_in", mrkdwn);
+            //attachment.put("fields", fields);
+            //JSONArray mrkdwn = new JSONArray();
+            //mrkdwn.put("pretext");
+            //mrkdwn.put("text");
+            //mrkdwn.put("fields");
+            //attachment.put("mrkdwn_in", mrkdwn);
+            attachment.put("text", message);
             JSONArray attachments = new JSONArray();
             attachments.put(attachment);
 
@@ -82,13 +93,15 @@ public class StandardSlackService implements SlackService {
             //prepare post methods for both requests types
             if (!botUser) {
                 // url = "https://" + webhookId + "." + host + "/services/hooks/jenkins-ci?token=" + getTokenToUse();
-                url = "https://discordapp.com/api/webhooks/" + webhookId + "/" + getTokenToUse() + "/slack";
+                url = "https://discordapp.com/api/webhooks/" + webhookId + "/" + getTokenToUse() + "/slack?wait=true";
                 post = new PostMethod(url);
                 JSONObject json = new JSONObject();
 
-                json.put("channel", roomId);
+                //json.put("channel", roomId);
                 json.put("attachments", attachments);
-                json.put("link_names", "1");
+                //json.put("link_names", "1");
+                
+                //json.put("text", message);
 
                 post.addParameter("payload", json.toString());
 
@@ -106,10 +119,19 @@ public class StandardSlackService implements SlackService {
                 }
                 post = new PostMethod(url);
                 */
+                url = "https://discordapp.com/api/webhooks/" + webhookId + "/" + getTokenToUse() + "/slack";
+                post = new PostMethod(url);
+                JSONObject json = new JSONObject();
+
+                json.put("attachments", attachments);
+
+                post.addParameter("payload", json.toString());
+
             }
             logger.fine("Posting: to " + roomId + " on " + webhookId + " using " + url + ": " + message + " " + color);
             HttpClient client = getHttpClient();
             post.getParams().setContentCharset("UTF-8");
+            post.getParams().setParameter("http.useragent", "discord webhook");
 
             try {
                 int responseCode = client.executeMethod(post);
