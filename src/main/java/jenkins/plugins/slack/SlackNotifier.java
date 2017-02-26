@@ -429,7 +429,7 @@ public class SlackNotifier extends Notifier {
 
         @Override
         public String getDisplayName() {
-            return "Slack Notifications";
+            return "Discord Notifications";
         }
 
         public FormValidation doTestConnection(@QueryParameter("slackWebhookId") final String webhookId,
@@ -457,7 +457,7 @@ public class SlackNotifier extends Notifier {
                     targetRoom = this.room;
                 }
                 SlackService testSlackService = getSlackService(targetDomain, targetToken, targetTokenCredentialId, targetBotUser, targetRoom);
-                String message = "Slack/Jenkins plugin: you're all set on " + DisplayURLProvider.get().getRoot();
+                String message = "Discord/Jenkins plugin: you're all set on " + DisplayURLProvider.get().getRoot();
                 boolean success = testSlackService.publish(message, "good");
                 return success ? FormValidation.ok("Success") : FormValidation.error("Failure");
             } catch (Exception e) {

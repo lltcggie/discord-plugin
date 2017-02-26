@@ -61,7 +61,7 @@ public class WebhookEndpoint implements UnprotectedRootAction {
 
         if (globalConfig.getSlackOutgoingWebhookToken() == null ||
             globalConfig.getSlackOutgoingWebhookToken().equals("")) {
-            return new JsonResponse(new SlackTextMessage("Slack token not set"),
+            return new JsonResponse(new SlackTextMessage("Discord token not set"),
                 StaplerResponse.SC_OK); 
         }
 

@@ -90,7 +90,7 @@ public class WebhookEndpointTest {
         WebResponse response = makeRequest(null);
 
         assertThat(response.getStatusCode(), is(HTTP_OK));
-        assertThat(getSlackMessage(response).getText(), is("Slack token not set"));
+        assertThat(getSlackMessage(response).getText(), is("Discord token not set"));
     }
 
     @Test
