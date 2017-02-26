@@ -1,14 +1,15 @@
-Slack plugin for Jenkins  [![Build Status][jenkins-status]][jenkins-builds] [![Slack Signup][slack-badge]][slack-signup]
+Discord plugin for Jenkins
 ----------------------------------------------------------------
 
-Provides Jenkins notification integration with Slack.
+Provides Jenkins notification integration with Discord.
 
 ## Install Instructions
 
-1. Get a Slack account: https://slack.com/
-2. Configure the Jenkins integration: https://my.slack.com/services/new/jenkins-ci
-3. Install this plugin on your Jenkins server
-4. Configure it in your Jenkins job (and optionally as global configuration) and **add it as a Post-build action**.
+1. Get a Discord Webhook ID and Webhook Token: https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+2. Install this plugin on your Jenkins server
+3. Configure it in your Jenkins job (and optionally as global configuration) and **add it as a Post-build action**.
+
+Webhook ID and Webhook Token: https://discordapp.com/api/webhooks/(Webhook ID)/(Webhook Token)
 
 #### Security
 
