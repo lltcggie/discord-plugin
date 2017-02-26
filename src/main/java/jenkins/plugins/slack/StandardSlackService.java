@@ -34,16 +34,16 @@ public class StandardSlackService implements SlackService {
 
     private static final Logger logger = Logger.getLogger(StandardSlackService.class.getName());
 
-    private String host = "slack.com";
-    private String teamDomain;
+    private String host = "discordapp.com";
+    private String webhookId;
     private String token;
     private String authTokenCredentialId;
     private boolean botUser;
     private String[] roomIds;
 
-    public StandardSlackService(String teamDomain, String token, String authTokenCredentialId, boolean botUser, String roomId) {
+    public StandardSlackService(String webhookId, String token, String authTokenCredentialId, boolean botUser, String roomId) {
         super();
-        this.teamDomain = teamDomain;
+        this.webhookId = webhookId;
         this.token = token;
         this.authTokenCredentialId = StringUtils.trim(authTokenCredentialId);
         this.botUser = botUser;
@@ -81,7 +81,8 @@ public class StandardSlackService implements SlackService {
             String url;
             //prepare post methods for both requests types
             if (!botUser) {
-                url = "https://" + teamDomain + "." + host + "/services/hooks/jenkins-ci?token=" + getTokenToUse();
+                // url = "https://" + webhookId + "." + host + "/services/hooks/jenkins-ci?token=" + getTokenToUse();
+                url = "https://discordapp.com/api/webhooks/" + webhookId + "/" + getTokenToUse() + "/slack";
                 post = new PostMethod(url);
                 JSONObject json = new JSONObject();
 
@@ -92,6 +93,8 @@ public class StandardSlackService implements SlackService {
                 post.addParameter("payload", json.toString());
 
             } else {
+                logger.info("mitaiou");
+                /*
                 url = "https://slack.com/api/chat.postMessage?token=" + getTokenToUse() +
                         "&channel=" + roomId +
                         "&link_names=1" +
@@ -102,8 +105,9 @@ public class StandardSlackService implements SlackService {
                     logger.log(Level.ALL, "Error while encoding attachments: " + e.getMessage());
                 }
                 post = new PostMethod(url);
+                */
             }
-            logger.fine("Posting: to " + roomId + " on " + teamDomain + " using " + url + ": " + message + " " + color);
+            logger.fine("Posting: to " + roomId + " on " + webhookId + " using " + url + ": " + message + " " + color);
             HttpClient client = getHttpClient();
             post.getParams().setContentCharset("UTF-8");
 

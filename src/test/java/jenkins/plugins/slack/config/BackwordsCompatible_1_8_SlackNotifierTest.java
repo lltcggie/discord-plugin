@@ -40,7 +40,7 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         FreeStyleProject project = (FreeStyleProject) jenkins.getItem("Test_Slack_Plugin");
         SlackNotifier notifier = project.getPublishersList().get(SlackNotifier.class);
 
-        assertEquals("jenkins-slack-plugin", notifier.getTeamDomain());
+        assertEquals("jenkins-slack-plugin", notifier.getWebhookId());
         assertEquals("auth-token-for-test", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
         assertEquals("#slack-plugin-testing", notifier.getRoom());
@@ -67,7 +67,7 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         FreeStyleProject project = (FreeStyleProject) jenkins.getItem("Test_Slack_Plugin");
         SlackNotifier notifier = project.getPublishersList().get(SlackNotifier.class);
 
-        assertEquals("jenkins-slack-plugin", notifier.getTeamDomain());
+        assertEquals("jenkins-slack-plugin", notifier.getWebhookId());
         assertEquals("auth-token-for-test", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
         assertEquals("#slack-plugin-testing", notifier.getRoom());
@@ -94,7 +94,7 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         FreeStyleProject project = (FreeStyleProject) jenkins.getItem("Test_Slack_Plugin");
         SlackNotifier notifier = project.getPublishersList().get(SlackNotifier.class);
 
-        assertEquals("", notifier.getTeamDomain());
+        assertEquals("", notifier.getWebhookId());
         assertEquals("", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
         assertEquals("", notifier.getRoom());
@@ -149,7 +149,7 @@ public class BackwordsCompatible_1_8_SlackNotifierTest {
         SlackNotifier notifier = project2.getPublishersList().get(SlackNotifier.class);
         assertNotNull(notifier);
 
-        assertEquals("", notifier.getTeamDomain());
+        assertEquals("", notifier.getWebhookId());
         assertEquals("", notifier.getAuthToken());
         assertEquals(false, notifier.getBotUser());
         assertEquals("", notifier.getRoom());

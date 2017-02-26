@@ -41,7 +41,7 @@ public class SlackSendStep extends AbstractStepImpl {
     private String tokenCredentialId;
     private boolean botUser;
     private String channel;
-    private String teamDomain;
+    private String webhookId;
     private boolean failOnError;
 
 
@@ -95,13 +95,13 @@ public class SlackSendStep extends AbstractStepImpl {
         this.channel = Util.fixEmpty(channel);
     }
 
-    public String getTeamDomain() {
-        return teamDomain;
+    public String getWebhookId() {
+        return webhookId;
     }
 
     @DataBoundSetter
-    public void setTeamDomain(String teamDomain) {
-        this.teamDomain = Util.fixEmpty(teamDomain);
+    public void setWebhookId(String webhookId) {
+        this.webhookId = Util.fixEmpty(webhookId);
     }
 
     public boolean isFailOnError() {
@@ -180,7 +180,7 @@ public class SlackSendStep extends AbstractStepImpl {
             }
             SlackNotifier.DescriptorImpl slackDesc = jenkins.getDescriptorByType(SlackNotifier.DescriptorImpl.class);
             listener.getLogger().println("run slackstepsend, step " + step.token+":" + step.botUser+", desc " + slackDesc.getToken()+":"+slackDesc.getBotUser());
-            String team = step.teamDomain != null ? step.teamDomain : slackDesc.getTeamDomain();
+            String team = step.webhookId != null ? step.webhookId : slackDesc.getWebhookId();
             String tokenCredentialId = step.tokenCredentialId != null ? step.tokenCredentialId : slackDesc.getTokenCredentialId();
             String token;
             boolean botUser;
@@ -195,7 +195,7 @@ public class SlackSendStep extends AbstractStepImpl {
             String color = step.color != null ? step.color : "";
 
             //placing in console log to simplify testing of retrieving values from global config or from step field; also used for tests
-            listener.getLogger().println(Messages.SlackSendStepConfig(step.teamDomain == null, step.token == null, step.channel == null, step.color == null));
+            listener.getLogger().println(Messages.SlackSendStepConfig(step.webhookId == null, step.token == null, step.channel == null, step.color == null));
 
             SlackService slackService = getSlackService(team, token, tokenCredentialId, botUser, channel);
             boolean publishSuccess = slackService.publish(step.message, color);

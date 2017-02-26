@@ -41,7 +41,7 @@ public class SlackNotifier extends Notifier {
 
     private static final Logger logger = Logger.getLogger(SlackNotifier.class.getName());
 
-    private String teamDomain;
+    private String webhookId;
     private String authToken;
     private String authTokenCredentialId;
     private boolean botUser;
@@ -66,13 +66,13 @@ public class SlackNotifier extends Notifier {
         return (DescriptorImpl) super.getDescriptor();
     }
 
-    public String getTeamDomain() {
-        return teamDomain;
+    public String getWebhookId() {
+        return webhookId;
     }
 
     @DataBoundSetter
-    public void setTeamDomain(final String teamDomain) {
-        this.teamDomain = teamDomain;
+    public void setWebhookId(final String webhookId) {
+        this.webhookId = webhookId;
     }
 
     public String getRoom() {
@@ -237,13 +237,13 @@ public class SlackNotifier extends Notifier {
         super();
     }
 
-    public SlackNotifier(final String teamDomain, final String authToken, final boolean botUser, final String room, final String authTokenCredentialId,
+    public SlackNotifier(final String webhookId, final String authToken, final boolean botUser, final String room, final String authTokenCredentialId,
                          final String sendAs, final boolean startNotification, final boolean notifyAborted, final boolean notifyFailure,
                          final boolean notifyNotBuilt, final boolean notifySuccess, final boolean notifyUnstable, final boolean notifyBackToNormal,
                          final boolean notifyRepeatedFailure, final boolean includeTestSummary, final boolean includeFailedTests,
                          CommitInfoChoice commitInfoChoice, boolean includeCustomMessage, String customMessage) {
         super();
-        this.teamDomain = teamDomain;
+        this.webhookId = webhookId;
         this.authToken = authToken;
         this.authTokenCredentialId = StringUtils.trim(authTokenCredentialId);
         this.botUser = botUser;
@@ -269,9 +269,9 @@ public class SlackNotifier extends Notifier {
     }
 
     public SlackService newSlackService(AbstractBuild r, BuildListener listener) {
-        String teamDomain = this.teamDomain;
-        if (StringUtils.isEmpty(teamDomain)) {
-            teamDomain = getDescriptor().getTeamDomain();
+        String webhookId = this.webhookId;
+        if (StringUtils.isEmpty(webhookId)) {
+            webhookId = getDescriptor().getWebhookId();
         }
         String authToken = this.authToken;
         boolean botUser = this.botUser;
@@ -295,12 +295,12 @@ public class SlackNotifier extends Notifier {
             listener.getLogger().println("Error retrieving environment vars: " + e.getMessage());
             env = new EnvVars();
         }
-        teamDomain = env.expand(teamDomain);
+        webhookId = env.expand(webhookId);
         authToken = env.expand(authToken);
         authTokenCredentialId = env.expand(authTokenCredentialId);
         room = env.expand(room);
 
-        return new StandardSlackService(teamDomain, authToken, authTokenCredentialId, botUser, room);
+        return new StandardSlackService(webhookId, authToken, authTokenCredentialId, botUser, room);
     }
 
     @Override
@@ -325,7 +325,7 @@ public class SlackNotifier extends Notifier {
     @Extension
     public static class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
-        private String teamDomain;
+        private String webhookId;
         private String token;
         private String tokenCredentialId;
         private boolean botUser;
@@ -338,8 +338,8 @@ public class SlackNotifier extends Notifier {
             load();
         }
 
-        public String getTeamDomain() {
-            return teamDomain;
+        public String getWebhookId() {
+            return webhookId;
         }
 
         public String getToken() {
@@ -372,7 +372,7 @@ public class SlackNotifier extends Notifier {
                             StringCredentials.class,
                             Jenkins.getInstance(),
                             ACL.SYSTEM,
-                            new HostnameRequirement("*.slack.com"))
+                            new HostnameRequirement("*.discordapp.com"))
                     );
         }
 
@@ -388,7 +388,7 @@ public class SlackNotifier extends Notifier {
 
         @Override
         public SlackNotifier newInstance(StaplerRequest sr, JSONObject json) {
-            String teamDomain = sr.getParameter("slackTeamDomain");
+            String webhookId = sr.getParameter("slackWebhookId");
             String token = sr.getParameter("slackToken");
             String tokenCredentialId = json.getString("tokenCredentialId");
             boolean botUser = "true".equals(sr.getParameter("slackBotUser"));
@@ -406,14 +406,14 @@ public class SlackNotifier extends Notifier {
             CommitInfoChoice commitInfoChoice = CommitInfoChoice.forDisplayName(sr.getParameter("slackCommitInfoChoice"));
             boolean includeCustomMessage = "on".equals(sr.getParameter("includeCustomMessage"));
             String customMessage = sr.getParameter("customMessage");
-            return new SlackNotifier(teamDomain, token, botUser, room, tokenCredentialId, sendAs, startNotification, notifyAborted,
+            return new SlackNotifier(webhookId, token, botUser, room, tokenCredentialId, sendAs, startNotification, notifyAborted,
                     notifyFailure, notifyNotBuilt, notifySuccess, notifyUnstable, notifyBackToNormal, notifyRepeatedFailure,
                     includeTestSummary, includeFailedTests, commitInfoChoice, includeCustomMessage, customMessage);
         }
 
         @Override
         public boolean configure(StaplerRequest sr, JSONObject formData) throws FormException {
-            teamDomain = sr.getParameter("slackTeamDomain");
+            webhookId = sr.getParameter("slackWebhookId");
             token = sr.getParameter("slackToken");
             tokenCredentialId = formData.getJSONObject("slack").getString("tokenCredentialId");
             botUser = "true".equals(sr.getParameter("slackBotUser"));
@@ -423,8 +423,8 @@ public class SlackNotifier extends Notifier {
             return super.configure(sr, formData);
         }
 
-        SlackService getSlackService(final String teamDomain, final String authToken, final String authTokenCredentialId, final boolean botUser, final String room) {
-            return new StandardSlackService(teamDomain, authToken, authTokenCredentialId, botUser, room);
+        SlackService getSlackService(final String webhookId, final String authToken, final String authTokenCredentialId, final boolean botUser, final String room) {
+            return new StandardSlackService(webhookId, authToken, authTokenCredentialId, botUser, room);
         }
 
         @Override
@@ -432,15 +432,15 @@ public class SlackNotifier extends Notifier {
             return "Slack Notifications";
         }
 
-        public FormValidation doTestConnection(@QueryParameter("slackTeamDomain") final String teamDomain,
+        public FormValidation doTestConnection(@QueryParameter("slackWebhookId") final String webhookId,
                                                @QueryParameter("slackToken") final String authToken,
                                                @QueryParameter("tokenCredentialId") final String authTokenCredentialId,
                                                @QueryParameter("slackBotUser") final boolean botUser,
                                                @QueryParameter("slackRoom") final String room) throws FormException {
             try {
-                String targetDomain = teamDomain;
+                String targetDomain = webhookId;
                 if (StringUtils.isEmpty(targetDomain)) {
-                    targetDomain = this.teamDomain;
+                    targetDomain = this.webhookId;
                 }
                 String targetToken = authToken;
                 boolean targetBotUser = botUser;
@@ -469,7 +469,7 @@ public class SlackNotifier extends Notifier {
     @Deprecated
     public static class SlackJobProperty extends hudson.model.JobProperty<AbstractProject<?, ?>> {
 
-        private String teamDomain;
+        private String webhookId;
         private String token;
         private boolean botUser;
         private String room;
@@ -487,7 +487,7 @@ public class SlackNotifier extends Notifier {
         private String customMessage;
 
         @DataBoundConstructor
-        public SlackJobProperty(String teamDomain,
+        public SlackJobProperty(String webhookId,
                                 String token,
                                 boolean botUser,
                                 String room,
@@ -503,7 +503,7 @@ public class SlackNotifier extends Notifier {
                                 boolean showCommitList,
                                 boolean includeCustomMessage,
                                 String customMessage) {
-            this.teamDomain = teamDomain;
+            this.webhookId = webhookId;
             this.token = token;
             this.botUser = botUser;
             this.room = room;
@@ -522,8 +522,8 @@ public class SlackNotifier extends Notifier {
         }
 
         @Exported
-        public String getTeamDomain() {
-            return teamDomain;
+        public String getWebhookId() {
+            return webhookId;
         }
 
         @Exported

@@ -62,8 +62,8 @@ public class AbstractProjectConfigMigrator {
     private void updateSlackNotifier(final SlackNotifier slackNotifier,
             final SlackJobProperty slackJobProperty) {
 
-        if (StringUtils.isBlank(slackNotifier.getTeamDomain())) {
-            slackNotifier.setTeamDomain(slackJobProperty.getTeamDomain());
+        if (StringUtils.isBlank(slackNotifier.getWebhookId())) {
+            slackNotifier.setWebhookId(slackJobProperty.getWebhookId());
         }
         if (StringUtils.isBlank(slackNotifier.getAuthToken())) {
             slackNotifier.setAuthToken(slackJobProperty.getToken());

@@ -57,7 +57,7 @@ public class SlackSendStepTest {
         slackSendStep.setToken("token");
         slackSendStep.setTokenCredentialId("tokenCredentialId");
         slackSendStep.setBotUser(false);
-        slackSendStep.setTeamDomain("teamDomain");
+        slackSendStep.setWebhookId("webhookId");
         slackSendStep.setChannel("channel");
         slackSendStep.setColor("good");
         stepExecution.step = slackSendStep;
@@ -76,7 +76,7 @@ public class SlackSendStepTest {
         when(slackServiceMock.publish(anyString(), anyString())).thenReturn(true);
 
         stepExecution.run();
-        verify(stepExecution, times(1)).getSlackService("teamDomain", "token", "tokenCredentialId", false, "channel");
+        verify(stepExecution, times(1)).getSlackService("webhookId", "token", "tokenCredentialId", false, "channel");
         verify(slackServiceMock, times(1)).publish("message", "good");
         assertFalse(stepExecution.step.isFailOnError());
     }
@@ -91,7 +91,7 @@ public class SlackSendStepTest {
 
         stepExecution.listener = taskListenerMock;
 
-        when(slackDescMock.getTeamDomain()).thenReturn("globalTeamDomain");
+        when(slackDescMock.getWebhookId()).thenReturn("globalWebhookId");
         when(slackDescMock.getToken()).thenReturn("globalToken");
         when(slackDescMock.getTokenCredentialId()).thenReturn("globalTokenCredentialId");
         when(slackDescMock.getBotUser()).thenReturn(false);
@@ -103,9 +103,9 @@ public class SlackSendStepTest {
         when(stepExecution.getSlackService(anyString(), anyString(), anyString(), anyBoolean(), anyString())).thenReturn(slackServiceMock);
 
         stepExecution.run();
-        verify(stepExecution, times(1)).getSlackService("globalTeamDomain", "globalToken", "globalTokenCredentialId", false, "globalChannel");
+        verify(stepExecution, times(1)).getSlackService("globalWebhookId", "globalToken", "globalTokenCredentialId", false, "globalChannel");
         verify(slackServiceMock, times(1)).publish("message", "");
-        assertNull(stepExecution.step.getTeamDomain());
+        assertNull(stepExecution.step.getWebhookId());
         assertNull(stepExecution.step.getToken());
         assertNull(stepExecution.step.getTokenCredentialId());
         assertNull(stepExecution.step.getChannel());

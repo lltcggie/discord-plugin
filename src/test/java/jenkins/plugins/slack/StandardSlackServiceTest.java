@@ -22,7 +22,7 @@ public class StandardSlackServiceTest {
      * Use a valid host, but an invalid team domain
      */
     @Test
-    public void invalidTeamDomainShouldFail() {
+    public void invalidWebhookIdShouldFail() {
         StandardSlackService service = new StandardSlackService("my", "token", null, false, "#general");
         service.publish("message");
     }
